@@ -31,6 +31,7 @@ class Board extends Component {
       { value: "y", isUsed: false },
       { value: "z", isUsed: false }
     ],
+    correctGuesses: [],
     word: "jazz"
   };
 
@@ -50,7 +51,14 @@ class Board extends Component {
 
   checkWord = letter => {
     const letterPattern = new RegExp(letter, "gi");
-    console.log(this.state.word.match(letterPattern));
+
+    if(this.state.word.match(letterPattern)) {
+      console.log(this.state.word.match(letterPattern))
+      this.setState(currentState => {
+        return {correctGuesses:[...currentState.correctGuesses, ...this.state.word.match(letterPattern)]}
+      })
+    }
+    
   };
 
   render() {
