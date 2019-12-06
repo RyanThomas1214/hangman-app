@@ -38,6 +38,7 @@ class Board extends Component {
     word: "",
     endGame: false,
     result: null,
+    image: null,
     count: 9,
     wholeBop: [
       {img:'/images/9.jpg', isVisible: false},
@@ -94,7 +95,7 @@ class Board extends Component {
       console.log(this.state)
       if(this.state.count === 0) {
         this.setState(currentState => {
-          return {endGame: true, result: 'Lost'}
+          return {endGame: true, result: 'Lost', image:'https://ichef.bbci.co.uk/images/ic/720x405/p06t9zsz.jpg'}
         })
       }
     })
@@ -108,7 +109,7 @@ class Board extends Component {
       }, () => {
         if(this.state.correctGuesses.length === this.state.word.length) {
           this.setState(currentState => {
-            return {endGame: true, result: 'Won'}
+            return {endGame: true, result: 'Won',image:'https://www.thesun.co.uk/wp-content/uploads/2019/03/NINTCHDBPICT000476179320.jpg'}
           })
         }
       })
@@ -130,7 +131,7 @@ class Board extends Component {
       return (
         <div>
           <h1>You Have {this.state.result}</h1>
-          <img src='https://www.thesun.co.uk/wp-content/uploads/2019/03/NINTCHDBPICT000476179320.jpg' alt='Bopper The Whopper'/>
+          <img src={this.state.image} alt='Bopper The Whopper'/>
         </div>
       )
     } else {
