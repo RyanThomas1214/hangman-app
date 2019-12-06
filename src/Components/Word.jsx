@@ -5,12 +5,14 @@ const Word = ({letter,correctGuesses}) => {
     // if letter clicked declare variable containing letter
     // if letter not clicked declare empty string variable
     // pass variable into p tag
-    if(correctGuesses.includes(letter)) guess = letter
+    guess = correctGuesses.includes(letter) ? letter : '___'
+
+    
     return (
-        <div>
-        <p>{guess}</p>
+        <div className='guesses'>
+        
         <p className = 'word'>
-            ___
+            {guess}
         </p>
 
         </div>

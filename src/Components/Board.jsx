@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Letter from "./Letter";
-import Word from "./Word"
+import Word from "./Word";
+import Image from './Image'
+import Input from './Input'
 
 class Board extends Component {
   state = {
@@ -33,9 +35,21 @@ class Board extends Component {
       { value: "z", isUsed: false }
     ],
     correctGuesses: [],
-    word: "jazz",
+    word: "",
     endGame: false,
-    result: null
+    result: null,
+    count: 9,
+    wholeBop: [
+      {img:'/images/9.jpg', isVisible: false},
+      {img:'/images/8.jpg', isVisible: false},
+      {img:'/images/7.jpg', isVisible: false},
+      {img:'/images/6.jpg', isVisible: false},
+      {img:'/images/5.jpg', isVisible: false},
+      {img:'/images/4.jpg', isVisible: false},
+      {img:'/images/3.jpg', isVisible: false},
+      {img:'/images/2.jpg', isVisible: false},
+      {img:'/images/1.jpg', isVisible: false}
+    ]
   };
 
   renderLetter(num) {
@@ -50,6 +64,17 @@ class Board extends Component {
     }
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault()
+    const {value} = event.target[0]
+    this.setState(currentState => {
+        return {word: value}
+    }, () => {
+      console.log(this.state)
+    })
+   
+}
+
   updateLetter = index => {
     this.setState(currentState => {
       const newLetters = [...currentState.letters];
@@ -57,6 +82,23 @@ class Board extends Component {
       return { letters: newLetters };
     });
   };
+
+  incorrectGuess = () => {
+    this.setState(currentState => {
+      const newBop = [...currentState.wholeBop]
+      newBop[currentState.count-1].isVisible = true
+      return {
+        wholeBop: newBop,
+        count: currentState.count -1}
+    }, () => {
+      console.log(this.state)
+      if(this.state.count === 0) {
+        this.setState(currentState => {
+          return {endGame: true, result: 'Lost'}
+        })
+      }
+    })
+  }
 
   checkWord = letter => {
     const letterPattern = new RegExp(letter, "gi");
@@ -70,12 +112,20 @@ class Board extends Component {
           })
         }
       })
+    } else {
+      this.incorrectGuess()
     }
     
   };
 
   render() {
     const {word, correctGuesses, letters, endGame} = this.state
+
+    if (this.state.word.length === 0) {
+      return (
+        <Input handleSubmit={this.handleSubmit}/>
+      )
+    }
     if(endGame) {
       return (
         <div>
@@ -84,8 +134,10 @@ class Board extends Component {
         </div>
       )
     } else {
+     
       return (
         <main>
+          <h2>Remaining Guesses:{this.state.count}</h2>
           <div className='word'>
           {word.split('').map((letter,i) => (
             <Word
@@ -107,6 +159,11 @@ class Board extends Component {
             />
           ))}
         </div>
+       <div className='image-Grid'>
+          {this.state.wholeBop.map(smallBop => {
+            return <Image image={smallBop.img} isVisible={smallBop.isVisible} key={smallBop.img}/>
+          })}
+       </div>
         </main>
        
       );
