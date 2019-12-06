@@ -32,7 +32,9 @@ class Board extends Component {
       { value: "z", isUsed: false }
     ],
     correctGuesses: [],
-    word: "jazz"
+    word: "jazz",
+    endGame: false,
+    result: null
   };
 
   renderLetter(num) {
@@ -51,30 +53,46 @@ class Board extends Component {
 
   checkWord = letter => {
     const letterPattern = new RegExp(letter, "gi");
-
     if(this.state.word.match(letterPattern)) {
       console.log(this.state.word.match(letterPattern))
       this.setState(currentState => {
         return {correctGuesses:[...currentState.correctGuesses, ...this.state.word.match(letterPattern)]}
+      }, () => {
+        if(this.state.correctGuesses.length === this.state.word.length) {
+          this.setState(currentState => {
+            return {endGame: true, result: 'Won'}
+          })
+        }
       })
     }
     
   };
 
   render() {
-    return (
-      <div>
-        {this.state.letters.map((letter, index) => (
-          <Letter
-            letter={letter}
-            index={index}
-            key={letter.value}
-            updateLetter={this.updateLetter}
-            checkWord={this.checkWord}
-          />
-        ))}
-      </div>
-    );
+    if(this.state.endGame) {
+      return (
+        <div>
+          <h1>You Have {this.state.result}</h1>
+          <img src='https://www.thesun.co.uk/wp-content/uploads/2019/03/NINTCHDBPICT000476179320.jpg' alt='Bopper The Whopper'/>
+        </div>
+      )
+    } else {
+
+      return (
+        
+        <div>
+          {this.state.letters.map((letter, index) => (
+            <Letter
+              letter={letter}
+              index={index}
+              key={letter.value}
+              updateLetter={this.updateLetter}
+              checkWord={this.checkWord}
+            />
+          ))}
+        </div>
+      );
+    }
   }
 }
 
