@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Letter from "./Letter";
+import Word from "./Word"
 
 class Board extends Component {
   state = {
@@ -43,6 +44,12 @@ class Board extends Component {
     }
   }
 
+  renderWord(num) {
+    for (let i = 0; i < num; i++) {
+      Word();
+    }
+  }
+
   updateLetter = index => {
     this.setState(currentState => {
       const newLetters = [...currentState.letters];
@@ -68,7 +75,8 @@ class Board extends Component {
   };
 
   render() {
-    if(this.state.endGame) {
+    const {word, correctGuesses, letters, endGame} = this.state
+    if(endGame) {
       return (
         <div>
           <h1>You Have {this.state.result}</h1>
@@ -76,11 +84,20 @@ class Board extends Component {
         </div>
       )
     } else {
-
       return (
-        
+        <main>
+          <div className='word'>
+          {word.split('').map((letter,i) => (
+            <Word
+            correctGuesses={correctGuesses}
+            letter={letter}
+            key={`letter_${i}`}
+            />
+          )
+          )}
+          </div>
         <div>
-          {this.state.letters.map((letter, index) => (
+          {letters.map((letter, index) => (
             <Letter
               letter={letter}
               index={index}
@@ -90,6 +107,8 @@ class Board extends Component {
             />
           ))}
         </div>
+        </main>
+       
       );
     }
   }
